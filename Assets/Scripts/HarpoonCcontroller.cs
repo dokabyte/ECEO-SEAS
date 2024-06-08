@@ -6,8 +6,19 @@ public class HarpoonController : MonoBehaviour
     public Transform firePoint;
     public float harpoonSpeed = 20f;
     public GameObject harpoonPrefab;
+    public AudioClip shootSound; // Adicione uma variável para o som de disparo
 
+    private AudioSource audioSource;
     private bool canShoot = true;
+
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>(); // Obtém o componente AudioSource
+        if (audioSource == null)
+        {
+            Debug.LogError("AudioSource component missing from this game object. Please add an AudioSource component.");
+        }
+    }
 
     void Update()
     {
@@ -34,6 +45,15 @@ public class HarpoonController : MonoBehaviour
         GameObject harpoon = Instantiate(harpoonPrefab, firePoint.position, transform.rotation);
         Rigidbody2D rb = harpoon.GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * harpoonSpeed;
+
+        if (audioSource != null && shootSound != null)
+        {
+            audioSource.PlayOneShot(shootSound); // Toca o som de disparo
+        }
+        else
+        {
+            Debug.LogError("Missing AudioSource or Shoot Sound. Please assign both in the Inspector.");
+        }
 
         StartCoroutine(ResetShootCooldown());
     }

@@ -4,9 +4,12 @@ using TMPro;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private PlayerHealth playerHealth;
     public static GameManager Instance;
     public int score = 0;
     public TMP_Text scoreText;
+    public AudioClip GameOver;
+    private AudioSource AudioSource3;
 
     public int initialHealth = 3;
     public GameObject gameOverUI;
@@ -17,14 +20,35 @@ public class GameManager : MonoBehaviour
     }
 
     void Start()
+
+
     {
-        PlayerHealth.health = initialHealth;
+        AudioSource3 = GetComponent<AudioSource>(); 
+        if (AudioSource3 == null)
+        {
+            Debug.LogError("AudioSource component missing from this game object. Please add an AudioSource component.");
+        }
+
+        playerHealth.health = initialHealth;
         UpdateScoreText();
     }
 
     public void gameOver()
     {
         gameOverUI.SetActive(true);
+        
+
+        if (AudioSource3 != null && GameOver != null)
+        {
+            AudioSource3.PlayOneShot(GameOver); 
+        }
+        else
+        {
+            Debug.LogError("Missing AudioSource or Shoot Sound. Please assign both in the Inspector.");
+        }
+
+        
+
     }
 
     public void Restart()
@@ -44,15 +68,15 @@ public class GameManager : MonoBehaviour
 
     public void AddScore(int amount)
     {
-        score += amount; // Adiciona pontos
-        UpdateScoreText(); // Atualiza o texto da pontuação na UI
+        score += amount; 
+        UpdateScoreText(); 
     }
 
     void UpdateScoreText()
     {
         if (scoreText != null)
         {
-            scoreText.text = "Score: " + score.ToString(); // Atualiza o texto da pontuação na UI
+            scoreText.text = "Score: " + score.ToString(); 
         }
     }
 }

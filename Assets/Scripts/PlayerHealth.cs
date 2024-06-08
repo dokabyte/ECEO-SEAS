@@ -3,12 +3,12 @@ using UnityEngine.UI;
 
 public class PlayerHealth : MonoBehaviour
 {
-    public static int health = 3;
+    public int health = 3;
     public Image[] hearts;
     public Sprite fullHeart;
     public Sprite emptyHeart;
 
-    private void Update()
+    public void UpdateHealth()
     {
         // Atualiza a UI das vidas do jogador
         for (int i = 0; i < hearts.Length; i++)
